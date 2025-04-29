@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3x3 Matrix Calculator</title>
+    <style>
+      body {
+        font-family: Arial;
+        text-align: center;
+        background-color: #eddace;
+        background-image: url(accountant-using-calculator-desk-office-white-background-financial-statement-top-view-279478500.webp);
+      }
+      .border {
+        border: 10px solid rgb(3, 3, 3);
+        background-color: black;
+        margin: 70px auto;
+        width: 80vh;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        border-radius: 6%;
+        padding: 20px;
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+      }
+      .close-btn {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 20px;
+        background-color: rgb(0, 0, 0);
+        color: rgb(255, 255, 255);
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .close-btn:hover {
+        background-color: rgb(0, 0, 0);
+      }
+      .matrix {
+        display: grid;
+        grid-template-columns: repeat(3, 50px);
+        gap: 5px;
+        margin: 10px auto;
+        margin-left: 220px;
+      }
+      input {
+        width: 50px;
+        padding: 5px;
+        text-align: center;
+        border-radius: 13%;
+      }
+      button {
+        background-color: #4acf4f;
+        color: white;
+        padding: 10px;
+        margin: 5px;
+        cursor: pointer;
+        border: none;
+      }
+      button:hover {
+        background-color: #45b549;
+      }
+      .result {
+        margin-top: 20px;
+        font-weight: bold;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        color: white;
+      }
+      h1,
+      h3 {
+        color: white;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0.2;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="close-btn" onclick="goBack()">
+      <a style="color: #ffffff; text-decoration: none" href="home.html">×</a>
+    </button>
+
+    <div class="border">
+      <h1>3x3 Matrix Calculator</h1>
+      <br />
+      <h3>Matrix A</h3>
+      <div class="matrix" id="matrixA">
+        <input type="number" placeholder="a11" id="a11" />
+        <input type="number" placeholder="a12" id="a12" />
+        <input type="number" placeholder="a13" id="a13" />
+        <input type="number" placeholder="a21" id="a21" />
+        <input type="number" placeholder="a22" id="a22" />
+        <input type="number" placeholder="a23" id="a23" />
+        <input type="number" placeholder="a31" id="a31" />
+        <input type="number" placeholder="a32" id="a32" />
+        <input type="number" placeholder="a33" id="a33" />
+      </div>
+      <br /><br />
+      <h3>Matrix B</h3>
+      <div class="matrix" id="matrixB">
+        <input type="number" placeholder="b11" id="b11" />
+        <input type="number" placeholder="b12" id="b12" />
+        <input type="number" placeholder="b13" id="b13" />
+        <input type="number" placeholder="b21" id="b21" />
+        <input type="number" placeholder="b22" id="b22" />
+        <input type="number" placeholder="b23" id="b23" />
+        <input type="number" placeholder="b31" id="b31" />
+        <input type="number" placeholder="b32" id="b32" />
+        <input type="number" placeholder="b33" id="b33" />
+      </div>
+
+      <button onclick="calculate('add')">Add</button>
+      <button onclick="calculate('subtract')">Subtract</button>
+      <button onclick="calculate('multiply')">Multiply</button>
+      <button>
+        <a href="transition1.html" style="color: white; text-decoration: none"
+          >Close</a
+        >
+      </button>
+
+      <div id="result" class="result"></div>
+    </div>
+
+    <script>
+      function getMatrix(id) {
+        return Array.from(document.querySelectorAll(`#${id} input`)).map(
+          (input) => parseFloat(input.value) || 0
+        );
+      }
+
+      function calculate(operation) {
+        const A = getMatrix("matrixA");
+        const B = getMatrix("matrixB");
+        let result;
+
+        if (operation === "add") {
+          result = A.map((val, i) => val + B[i]);
+        } else if (operation === "subtract") {
+          result = A.map((val, i) => val - B[i]);
+        } else if (operation === "multiply") {
+          result = [
+            A[0] * B[0] + A[1] * B[3] + A[2] * B[6],
+            A[0] * B[1] + A[1] * B[4] + A[2] * B[7],
+            A[0] * B[2] + A[1] * B[5] + A[2] * B[8],
+            A[3] * B[0] + A[4] * B[3] + A[5] * B[6],
+            A[3] * B[1] + A[4] * B[4] + A[5] * B[7],
+            A[3] * B[2] + A[4] * B[5] + A[5] * B[8],
+            A[6] * B[0] + A[7] * B[3] + A[8] * B[6],
+            A[6] * B[1] + A[7] * B[4] + A[8] * B[7],
+            A[6] * B[2] + A[7] * B[5] + A[8] * B[8],
+          ];
+        }
+
+        displayResult(result);
+      }
+
+      function displayResult(result) {
+        const output = document.getElementById("result");
+        output.innerHTML = `
+                <h3>Result:</h3>
+                <div class="matrix">
+                    ${result
+                      .map((val) => `<div>${val.toFixed(2)}</div>`)
+                      .join("")}
+                </div>`;
+        output.style.opacity = "1";
+      }
+    </script>
+  </body>
+</html>

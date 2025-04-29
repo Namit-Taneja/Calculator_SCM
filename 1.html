@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes buttonPress {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(0.95);
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eddace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-size: cover;
+            margin: 0;
+            background-image: url(wp2497661.jpg);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            background-color: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: rgb(50, 50, 50);
+            transform: scale(1.1);
+        }
+
+        .calculator {
+            background-color: black;
+            padding: 20px;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            transition: transform 0.5s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .calculator:hover {
+            transform: scale(1.02);
+        }
+
+        .display {
+            background-color: #484242;
+            color: white;
+            font-size: 2em;
+            padding: 10px;
+            text-align: right;
+            border-radius: 40px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 10px;
+        }
+
+        button {
+            font-size: 1.5em;
+            padding: 15px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        button:hover {
+            background-color: #666;
+            transform: scale(1.1);
+        }
+
+        button:active {
+            animation: buttonPress 0.1s ease;
+        }
+
+        .function {
+            background-color: #f57c00;
+        }
+
+        .function:hover {
+            background-color: #fb8c00;
+        }
+
+        .equals {
+            background-color: #4caf50;
+            grid-column: span 2;
+        }
+
+        .zero {
+            background-color: #444;
+            grid-column: span 2;
+        }
+
+        .equals:hover {
+            background-color: #66bb6a;
+        }
+    </style>
+</head>
+<body>
+
+<button class="close-btn" onclick="goBack()"><a style="color: #ffffff; text-decoration: none;" href="home.html">×</a></button>
+
+<div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+        <button onclick="clearDisplay()">AC</button>
+        <button onclick="deleteLast()">DEL</button>
+        <button onclick="appendToDisplay('(')">(</button>
+        <button onclick="appendToDisplay(')')">)</button>
+        <button onclick="appendToDisplay('%')">%</button>
+
+        <button onclick="appendToDisplay('sin(')">sin</button>
+        <button onclick="appendToDisplay('cos(')">cos</button>
+        <button onclick="appendToDisplay('tan(')">tan</button>
+        <button onclick="appendToDisplay('ln(')">ln</button>
+        <button class="function" onclick="appendToDisplay('*')">×</button>
+
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button onclick="appendToDisplay('Math.sqrt(')">√</button>
+        <button class="function" onclick="appendToDisplay('/')">÷</button>
+
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button onclick="appendToDisplay('**')">x^y</button>
+        <button class="function" onclick="appendToDisplay('+')">+</button>
+
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button onclick="appendToDisplay('Math.exp(')">exp</button>
+        <button class="function" onclick="appendToDisplay('-')">-</button>
+
+        <button class="zero" onclick="appendToDisplay('0')">0</button>
+        <button onclick="appendToDisplay('.')">.</button>
+        <button class="equals" onclick="calculateResult()">=</button>
+
+        <button onclick="appendToDisplay('factorial(')">x!</button>
+        <button onclick="appendToDisplay('1/(')">1/x</button>
+        <button onclick="appendToDisplay('Math.abs(')">|x|</button>
+    </div>
+</div>
+
+<script>
+function goBack() {
+    window.history.back();
+}
+
+let currentInput = '';
+const display = document.getElementById('display');
+
+function appendToDisplay(value) {
+    if (currentInput === '0' && !isNaN(value)) {
+        currentInput = value;
+    } else {
+        currentInput += value;
+    }
+    updateDisplay();
+}
+
+function clearDisplay() {
+    currentInput = '';
+    updateDisplay();
+}
+
+function deleteLast() {
+    currentInput = currentInput.slice(0, -1);
+    updateDisplay();
+}
+
+function calculateResult() {
+    try {
+        let expression = currentInput.replace(/√/g, 'Math.sqrt')
+                                      .replace(/(\d+)!/g, 'factorial($1)')
+                                      .replace(/\^/g, '**');
+        expression = expression.replace(/sin\(([^)]+)\)/g, 'Math.sin($1 * Math.PI / 180)')
+                               .replace(/cos\(([^)]+)\)/g, 'Math.cos($1 * Math.PI / 180)')
+                               .replace(/tan\(([^)]+)\)/g, 'Math.tan($1 * Math.PI / 180)')
+                               .replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
+        const result = eval(expression);
+        currentInput = result.toString();
+    } catch (error) {
+        currentInput = 'Error';
+    }
+    updateDisplay();
+}
+
+function updateDisplay() {
+    display.innerText = currentInput || '0';
+    display.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+        display.style.transform = 'scale(1)';
+    }, 100);
+}
+
+function factorial(n) {
+    if (n === 0 || n === 1) return 1;
+    return n * factorial(n - 1);
+}
+</script>
+</body>
+</html>

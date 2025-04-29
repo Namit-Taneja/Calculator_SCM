@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #d4cfcf;
+            background-image: url(Best-Units-Converter-Apps.jpg);
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            background-color: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .close-btn:hover {
+            background-color: rgb(0, 0, 0);
+        }
+        .converter-container {
+            width: 300px;
+            padding: 35px;
+            border-radius: 40px;
+            background-color: rgb(0, 0, 0);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .input-group input,
+        .input-group select,
+        button {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            background-color: #393737;
+            color: #ffffff;
+        }
+        button {
+            background-color: #4CAF50;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <button class="close-btn" onclick="goBack()"><a style="color: #ffffff; text-decoration: none;" href="home.html">×</a></button>
+
+<div class="converter-container">
+    <h2>Unit Converter Calculator</h2>
+
+    <div class="input-group">
+        <label for="value">Enter Value:</label>
+        <input style="width: 280px; " type="number" id="value" placeholder="Enter value" required>
+    </div>
+
+    <div class="input-group">
+        <label for="unitType">Select Unit Type:</label>
+        <select id="unitType" onchange="updateUnits()">
+            <option value="length">Length</option>
+            <option value="weight">Weight</option>
+        </select>
+    </div>
+<div class="input-group">
+        <label for="toUnit">From:</label>
+        <select id="toUnit"></select>
+    </div>
+
+    <div class="input-group">
+        <label for="fromUnit">To:</label>
+        <select id="fromUnit"></select>
+    </div>
+    <button onclick="convert()">Convert</button>
+    <div class="result" id="result">Result: -</div>
+</div>
+<script>
+    const lengthUnits = {
+        meter: 1,
+        kilometer: 0.001,
+        centimeter: 100,
+        millimeter: 1000
+    };
+    const weightUnits = {
+        gram: 1,
+        kilogram: 0.001,
+        milligram: 1000,
+        pound: 0.00220462
+    };
+    function updateUnits() {
+        const unitType = document.getElementById("unitType").value;
+        const fromUnit = document.getElementById("fromUnit");
+        const toUnit = document.getElementById("toUnit");
+        fromUnit.innerHTML = "";
+        toUnit.innerHTML = "";
+        const units = unitType === "length" ? lengthUnits : weightUnits;
+        for (const unit in units) {
+            fromUnit.innerHTML += `<option value="${units[unit]}">${unit}</option>`;
+            toUnit.innerHTML += `<option value="${units[unit]}">${unit}</option>`;
+        }
+    }
+    function convert() {
+        const value = parseFloat(document.getElementById("value").value);
+        const fromUnit = parseFloat(document.getElementById("fromUnit").value);
+        const toUnit = parseFloat(document.getElementById("toUnit").value);
+
+        if (!isNaN(value) && fromUnit && toUnit) {
+            const result = (value * fromUnit) / toUnit;
+            document.getElementById("result").textContent = `Result: ${result}`;
+        } else {
+            document.getElementById("result").textContent = "Result: Invalid input!";
+        }
+    }
+    updateUnits();
+</script>
+
+</body>
+</html>
